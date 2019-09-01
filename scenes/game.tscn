@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=1]
+[gd_scene load_steps=21 format=1]
 
 [ext_resource path="res://scripts/game.gd" type="Script" id=1]
 [ext_resource path="res://assets/fundo.png" type="Texture" id=2]
@@ -9,9 +9,12 @@
 [ext_resource path="res://assets/felpudo/felpudoVoa4.png" type="Texture" id=7]
 [ext_resource path="res://assets/felpudo/felpudoVoa5.png" type="Texture" id=8]
 [ext_resource path="res://assets/felpudo/felpudoVoa6.png" type="Texture" id=9]
-[ext_resource path="res://scenes/tube.tscn" type="PackedScene" id=10]
-[ext_resource path="res://scripts/tube_generator.gd" type="Script" id=11]
-[ext_resource path="res://assets/font160.fnt" type="BitmapFont" id=12]
+[ext_resource path="res://sounds/somVoa.ogg" type="AudioStream" id=10]
+[ext_resource path="res://scenes/tube.tscn" type="PackedScene" id=11]
+[ext_resource path="res://sounds/somHit.ogg" type="AudioStream" id=12]
+[ext_resource path="res://scripts/tube_generator.gd" type="Script" id=13]
+[ext_resource path="res://assets/font160.fnt" type="BitmapFont" id=14]
+[ext_resource path="res://sounds/somScore.ogg" type="AudioStream" id=15]
 
 [sub_resource type="Animation" id=6]
 
@@ -129,7 +132,6 @@ script/script = ExtResource( 3 )
 transform/scale = Vector2( 1.4, 1.4 )
 frames = SubResource( 1 )
 animation = "default"
-frame = 2
 playing = true
 
 [node name="ZeCollision" type="CollisionShape2D" parent="Ze"]
@@ -138,6 +140,17 @@ transform/pos = Vector2( 23.3676, 0 )
 shape = SubResource( 5 )
 trigger = false
 _update_shape_index = 0
+
+[node name="Sound" type="StreamPlayer" parent="Ze"]
+
+stream/stream = ExtResource( 10 )
+stream/play = false
+stream/loop = false
+stream/volume_db = -5.0
+stream/autoplay = false
+stream/paused = false
+stream/loop_restart_time = 0.0
+stream/buffering_ms = 500
 
 [node name="Limits" type="StaticBody2D" parent="."]
 
@@ -176,15 +189,26 @@ _update_shape_index = 1
 editor/display_folded = true
 z/z = 1
 
-[node name="Tube" parent="Tubes" instance=ExtResource( 10 )]
+[node name="Tube" parent="Tubes" instance=ExtResource( 11 )]
 
 transform/pos = Vector2( 1500, 850 )
+
+[node name="Sound" type="StreamPlayer" parent="Tubes"]
+
+stream/stream = ExtResource( 12 )
+stream/play = false
+stream/loop = false
+stream/volume_db = 0.0
+stream/autoplay = false
+stream/paused = false
+stream/loop_restart_time = 0.0
+stream/buffering_ms = 500
 
 [node name="Genenator" type="Position2D" parent="Tubes"]
 
 editor/display_folded = true
 transform/pos = Vector2( 1500, 850 )
-script/script = ExtResource( 11 )
+script/script = ExtResource( 13 )
 
 [node name="Timer" type="Timer" parent="Tubes/Genenator"]
 
@@ -193,50 +217,46 @@ wait_time = 3.0
 one_shot = false
 autostart = true
 
-[node name="TimerToRestartGame" type="Timer" parent="."]
-
-process_mode = 1
-wait_time = 2.0
-one_shot = false
-autostart = false
-
 [node name="Score" type="Node2D" parent="."]
 
+editor/display_folded = true
 z/z = 2
 
-[node name="ScoreControl" type="Control" parent="Score"]
-
-anchor/left = 3
-anchor/top = 3
-anchor/right = 3
-anchor/bottom = 3
-hint/tooltip = "Pass through the tubes to increase your score."
-focus/ignore_mouse = false
-focus/stop_mouse = true
-size_flags/horizontal = 2
-size_flags/vertical = 2
-margin/left = -468.0
-margin/top = -268.0
-margin/right = -507.0
-margin/bottom = -308.0
-
-[node name="Label" type="Label" parent="Score/ScoreControl"]
+[node name="Label" type="Label" parent="Score"]
 
 focus/ignore_mouse = true
 focus/stop_mouse = true
 size_flags/horizontal = 2
 size_flags/vertical = 0
-margin/left = -92.0
-margin/top = -224.0
-margin/right = 51.0
-margin/bottom = -51.0
-custom_fonts/font = ExtResource( 12 )
+margin/left = 408.0
+margin/top = 76.0
+margin/right = 551.0
+margin/bottom = 249.0
+custom_fonts/font = ExtResource( 14 )
 text = "0"
 align = 1
 valign = 1
 percent_visible = 1.0
 lines_skipped = 0
 max_lines_visible = -1
+
+[node name="Sound" type="StreamPlayer" parent="Score"]
+
+stream/stream = ExtResource( 15 )
+stream/play = false
+stream/loop = false
+stream/volume_db = 0.0
+stream/autoplay = false
+stream/paused = false
+stream/loop_restart_time = 0.0
+stream/buffering_ms = 500
+
+[node name="TimerToRestartGame" type="Timer" parent="."]
+
+process_mode = 1
+wait_time = 2.0
+one_shot = false
+autostart = false
 
 [connection signal="timeout" from="Tubes/Genenator/Timer" to="Tubes/Genenator" method="_on_Timer_timeout"]
 

@@ -1,5 +1,7 @@
 extends Node2D
 
+onready var tube_sound = get_tree().get_current_scene().get_node("Tubes/Sound")
+
 var speed = -400
 var game_scene
 
@@ -18,6 +20,7 @@ func _process(delta):
 
 func _on_Area2D_body_enter( body ):
 	if body.get_name() == "Ze":
+		tube_sound.play()
 		game_scene.kill()
 
 func _on_ScoreBarrier_body_enter( body ):
