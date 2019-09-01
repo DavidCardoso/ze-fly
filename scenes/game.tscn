@@ -132,6 +132,7 @@ script/script = ExtResource( 3 )
 transform/scale = Vector2( 1.4, 1.4 )
 frames = SubResource( 1 )
 animation = "default"
+frame = 4
 playing = true
 
 [node name="ZeCollision" type="CollisionShape2D" parent="Ze"]
