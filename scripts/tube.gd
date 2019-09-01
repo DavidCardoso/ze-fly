@@ -19,3 +19,7 @@ func _process(delta):
 func _on_Area2D_body_enter( body ):
 	if body.get_name() == "Ze":
 		game_scene.kill()
+
+func _on_ScoreBarrier_body_enter( body ):
+	if body.get_name() == "Ze":
+		game_scene.increment_score()
